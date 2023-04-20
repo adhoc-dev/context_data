@@ -1,47 +1,219 @@
-Interviewer: Thank you for taking the time to talk with me today. Can you tell me a little bit about your cooking habits?
+﻿Video explicando este procedimiento/artículo
+Preparación por única vez
+Instalación de odoo-module-migrator
+pip3 install --upgrade git+https://github.com/adhoc-cicd/oca-odoo-module-migrator/@master
 
-Interviewee: Of course! I try to cook most of my meals at home, partly to save money and partly to control my diet.
 
-Interviewer: That's great to hear. How do you decide what to cook?
+NOTA: algunos reportaron problemas con que no funcionaba, pareciera ser que tiene que ver con algo así . El mensaje de pip al instalar diría algo así “WARNING: The script xxxxxxx is installed in 'xxxxxx’ which is not on PATH”
+Por el momento instalando con sudo les funcionó pero lo ideal siempre es instalar los paquetes en el usuario. 
+Instalación de pre-commit
 
-Interviewee: I usually plan my meals out for the week on Sundays. I try to include a mix of different proteins and vegetables, and I always make sure to have plenty of healthy options on hand.
 
-Interviewer: That's a smart approach. How often do you cook at home?
+sudo pip3 install pre-commit
+Procedimiento Actualización de módulo
+Gestión de las tareas de actualización
+Más info acá 
+Procedimiento migración de módulos
+Para nuestros módulos se pueden migrar juntos en un solo PR módulos muy afines (preferentemente separando en distintos commits pero sin volverse locos)
 
-Interviewee: I would say I cook about 5-6 nights a week. I try to make enough food to have leftovers for lunch the next day too.
 
-Interviewer: That's impressive! What do you like about cooking at home?
+Los procedimientos de OCA se pueden ver acá. Nosotros agilizamos un poco usando la tool “odoo-module-migrate”
 
-Interviewee: I like being able to control what goes into my meals, and I find cooking to be a relaxing activity after a long day at work.
 
-Interviewer: That's understandable. What frustrates you when you cook at home?
+En oca hay 3 diferencias respecto a nuestro procedimiento / forma de trabajar:
+1. En los nuevos branches, no están disponibles los módulos de la versión anterior.
+2. Se usa "pre-commit" para ajustar formateo
+3. No se acepta migrar varios módulos en el mismo PR
+4. Hay que avisar sobre la migración en un issue de cada repo con nombre “Migration to version XX”
 
-Interviewee: Sometimes it can be frustrating when a recipe doesn't turn out the way I want it to, or if I don't have all the ingredients I need.
 
-Interviewer: I can see how that would be frustrating. Do you eat breakfast at home? Can you describe your breakfast preparation process?
+Procedimiento
+* Tomar un módulo del tile de actualización
+* Asignarlo a uno mismo
+* Pararse en el repositorio que vamos a migrar
+* git fetch origin 16.0
+* git checkout -b [versión a la cual migrar].0-t-[]-[] origin/16.0
+* Para modulos de
+   * Adhoc: odoo-module-migrate -i 15.0 -t 16.0 -nrmf --modules [module_name]
+   * oca: odoo-module-migrate -i 15.0 -t 16.0 -fp --modules [module_name]
+* odoo -d [db_name] -i [module_name]
+* IMPORTANTE: Revisar y aplicar cambios de sección Checklist actualización de módulos
+* git commit -a --amend
+* Si es oca, correr pre-commit
+   * pre-commit run -a
+   * git commit -a --amend
+* git push adhoc-dev [branch_name]
+* Si es oca y da error en pre commit, puede que sea necesario actualizar el archivo de config del pre-commit del repo ver (Esto puede ser necesario si falla el pre-commit)
+Sobre migración de varios módulos juntos
+Cuando muchos módulos están relacionados, hay mucha economía de escala en migrarlos a todos juntos, no solo para el desarrollador, si no también para quien realiza los tests y hace el review.
+En estos casos es MUY recomendable hacer todos juntos. Al respecto, si los módulos son de:
+* Adhoc:
+   * Idealmente hacer un commit por cada módulo en mismo PR
+   * Si por alguna razón queda alguna cosa cruzada en otro commit no es terrible
+   * Si son módulos en distintos repositorios es importante usar mismo nombre de branch para que la build de runbot sea la misma y los test y el test funcional se haga sobre todo a la vez
+* OCA:
+   * En oca no se exige que cada PR migre solo un módulo
+   * Si podemos hacer varios PRs en simultánea y usar este artilugio oficial de OCA para que un PR use otro PR temporalmente: Use temporary reference(s) to another pull request(s) 
+Checklist actualización de módulos
+* Recordar levantar con dev=all para tener un pdb donde se produzcan errores
+* Revisar todos los warnings del LOG
+* TESTEAR funcionalmente
+* Revisar en los modelos nativos de odoo, si hay métodos que llamen a super, revisar que el método de odoo siga existiendo en odoo y se definan igual
+* Borrar comentarios y archivos sin uso
+* Revisar readme (ver como redactar un Readme)
+* Estamos adaptando algún registro con noupdate? En pasos avisar que si se cambia una rule y tenía no update (o cualquier otra data con noupdate) se requiere script de migra
+* ¿Algún cambio nuevo que detectamos? Podemos sumar algo a los release notes? Podemos Mejorar odoo-module-migrator?
+* Ver release notes técnicos de la versión correspondiente (especial atención en “Checklist…”:
+   * Release Notes Técnico Odoo 16
+   * Release notes técnico odoo v15
+Mejorar odoo-module-migrator
+OCA days 2022 - Odoo Module Migrator 
+TODO[a]
+VIEJO - Aspectos específicos por cada versión
+V15
+Ver: Release notes técnicos v15
+V13
+Prioritario
+* Statusbar clickeable
+   * clickable="True" → options="{'clickable': '1'...
+* Contables: (NO hacer reemplazos masivos)
+      * date_invoice → invoice_date
+      * Buscar 'paid' y 'open' y reemplazar por lo que corresponda
+      * Account.invoice → account.move
+      * account.document.type → l10n_latam.document.type
+      * afip_responsability_type_id → l10n_ar_afip_responsibility_type_id
+      * main_id_number → vat
+      * main_id_category_id → l10n_latam_identification_type_id
+      * l10n_ar_partner.dt_CUIT → l10n_ar.it_cuit
+      * action_invoice_open → post
+      * company_requires_vat → l10n_ar_company_requires_vat
+      * afip_code → l10n_ar_afip_code (no en todos los casos pero muy probable)
+      * document_number → l10n_latam_document_number (salvo en pagos que sigue llamandose document_number)
+      * cuit_required → ensure_vat
+      * formated_cuit -->l10n_ar_formatted_vat
+      * Sobre eliminado de facturas y fusión con asientos, también creación de facturas
+* Recordsets
+   * Revisar si hace falta agregar "sorted()"
+* Campos calculados
+   * Revisar / agregar depends para garantizar que devuelvan valor correcto (sin depends por ahí deja valor de cache)
+   * Si no stored. Devolver siempre un valor:
+      * Devolver el valor por defecto según tipo
+         * Float: 0.0
+         * Integer: 0
+         * Recordset: recorset vacío
+         * Char: False
+         * Boolean: False
+      * Si no vamos obtener error tipo Something went wrong !
+  
 
-Interviewee: Yes, I always eat breakfast at home. I usually have oatmeal with fruit and nuts, and I'll make a batch of it at the beginning of the week so I can just heat it up in the morning.
+   * Context depends?
+   * No mezclar métodos computados que escriban stored y no stored
+* No más supplier / customer en partners
+   * 'search_default_supplier':1 → 'res_partner_search_mode': 'supplier'
+   * 'search_default_customer':1 → 'res_partner_search_mode': 'customer'
+   * domain=[('customer', '=', True)] → no dejar nada, si bien se podria psar el context en odoo veo que no dejan nada
+   * domain=[('supplier', '=', True)] → no dejar nada, si bien se podria psar el context en odoo veo que no dejan nada
+* Cambio de multi-company
+   * Muy buena doc acá
+   * En cualquier modelo que creemos con company_id ver de usar "_check_company_auto[b]" y "check_company=True"
+   * env.user.company_id --> env.company
+   * ['|',('company_id','child_of',[user.company_id.id]),('company_id','=',False)] → ['|',('company_id', 'in', company_ids),('company_id','=',False)]
+   * attrs="{'invisible': [('customer', '=', False)]}"
+   * En campos property (company_dependant) domain="[('company_id', '=', allowed_company_ids[0])]", check_company=True,
+   * Timesheet / project
+   * task_new_project → task_in_project
+   * Decimal precision (si figura daría warning en log)
+      * digits=dp.get_precision('Account') → digits='Account'
+   * Xml - definición de function
+      * Si obtenemos error "AssertionError: Element odoo has extra content: record, line 3" es porque hay un <function que se le está pasando id=" o algun tag adicional en algún otro lado (borrar ese tag)
+   * Invalid view xxxx.tree definition in …
+      * Esto puede ser porque ya no se puede definir mas el fonts y colors en la definición de vistas tree, ahora hay que hacer algo como "decoration-info="state == 'draft'"
+NTH / menos prioridad
+* NO crear nuevos onchanges pero no gastarnos en sacar los existentes. Oportunidad de usar nuevos campos computed stored (o related) en vez de onchanges
+   * Siempre poner store=True y readonly=False
+   * Si usamos related recordar revisar depends que por defecto es el mismo que related
+* Mejoras en todas las versiones (media prioridad)
+   * En python: No usar eval! Usar safe_eval (y seguramente en otros usa dict, list, etc) (EN XML SEGUIMOS CON EVAL)
+   * Seguridad, volver a revisar:
+      * 1. Usar ACLS que minimo restringan a employee
+      * 2. Usar groups en fields criticos de modelos publicos (ej. res.company)
+      * 3. Usar métodos privados (con _) cuando sea posible
+      * Otros de esta charla?
+* Baja prioridad
+   * Campos related: entender que por defecto son related_sudo = True (tal vez en algunos casos querramos que sea False, como en el caso de costo de reposición según precio de proveedor)
+V12
+   * Ajustes necesarios para v12
+      * Vistas kanban
+         * borrar "class="dropdown-toggle btn""
+      * Buttons en vistas tree requiere de string (por más que tengan icon)
+      * Campos related:
+         * que tengan readonly hay que borrarlo. 
+         * sin readonly hay que poner readonly=False
+      * parent_left → parent_path
+         * Reemplazar campos "parent_left" y "parent_right" por:
+parent_path = fields.Char(index=True)
+      * Vistas requieren name en filters y for en labels (buscar "<filter" y "<label")
+      * Tema fechas mas info
+         * Campos fecha devuelven datetime (no haría falta conversión strftime/strptime)
+         * Tener en cuenta estos tips sobre todo de date_utils y float_utils
+         * Ya no hace falta la conversión a “string” para usar en un dominio de un search, acepta tanto string como datetime. 
+Ej: [(‘date’, ‘>’, fields.Datetime.now(self)])
 
-Interviewer: That's a great idea for meal prep. Can you describe your dinner preparation process?
 
-Interviewee: Sure. I usually start by prepping any vegetables or proteins I'm going to use. Then I'll heat up some oil in a pan and start cooking everything. I like to keep things simple, so I usually just use basic seasonings like salt, pepper, and garlic.
+      * cambiar los ".compute"( (de currencies) a ._convert(.
+         * Por ejemplo:
+            * de: currency.compute(1.0, rec.company_id.currency_id, round=False)
+            * a: currency._convert(1.0, rec.company_id.currency_id, company, date, round=False)
+         * DONDE:
+            * hay que ver qué company y date pasar y podemos borrar si en contexto estábamos mandando date y/o company para este cálculo
+            * el date puede ser algo así: rec.date_invoice or fields.Date.today()
+      * message_post
+         * aparentemente, si estamos usando .message_post("mensaje") tenemos que agregar "body=" al pasar el mensaje, es decir .message_post(body="mensaje")
+      * Estados facturas
+         * no mas estado proforma, proforma2 ahora los estados son 'draft', 'open', 'in_payment', 'paid', 'cancel'
+      * create multi:
+         * podemos crear registros de manera multi guardando los dict en lista y luego llamando a .create(vals_list)
+         * si estamos modificando un create revisar si el método original usa model_create_multi y tratar de usarlo
+   * Checklist (para desarrollador y revisor). En orden de prioridad
+      * Borrar scripts de migración viejos
+      * Usabilidad
+         * Labels y helps de campos
+         * Verificar constraints (sql y normales) que podrían venir bien. (por ej. de compañías)
+         * Mejorar dominios o valores que se pasen por contexto para mejorar usabilidad
+         * Mejorar mensajes de excepción que arrojamos al usuario. Que entienda sin necesidad de preguntar. Y usar raise correcto (ver en checklist performance) (elegir tipo correcto según esto)
+      * Checklist de performance. Especialmente:
+         * related:
+            * que no se usen en constraints / create / write
+            * si NO es store, NO usar en search o código en general
+      * Seguridad:
+         * Donde hagamos cr.execute revisar que los parámetros se pasan como argumento
+         * Pasar métodos públicos a privados (agregar prefijo _), sin volvernos locos. CUIDADO:, si hacemos un método privado no podemos llamarlo remotamente ni desde vistas
+         * Usar ACLS que minimo restringan a employee
+         * Usar groups en fields criticos de modelos públicos (ej. res.company)
+         * Podemos proteger algún uso indeseado?
+      * Groups en vistas (usar group en campo si es por tema seguridad):
+         * Si es solo para _ux y no son campos calculados complejos que afecten performance, podemos dejarlo en la vista
+         * Pero es mejor, si no complica código, poner el groups en la vista para que directamente no lo renderice
+      * Agregar datos demo.
+      * Cosas de formato:
+         * Usar forma reducida de super "super()"
+         * Re-organizar carpetas usando “models, views, etc”
+         * Borrar los <data> (mover noupdate a "odoo" si corresponde)
+      * Hay casos de test críticos que podrían implementarse?
+      * Readme según estas bases y con descripción correcta (en inglés salvo para repos en bitbucket)
+   * Verificar si requiere o no scripts de migración e implementar
+   * Hacer PR:
+      * vincular PR en tarea
+      * pasar a etapa reviewing
+      * mandar comentario pidiendo reviews
+      * registrar cualquier cambio detectado en este documento
 
-Interviewer: Sounds delicious. Do you consider buying an additional kitchen appliance in the near future? If so, why and which appliance?
 
-Interviewee: I've been thinking about getting an air fryer. I like the idea of being able to cook things with less oil, and it seems like a really versatile appliance.
+      * [a]@bz@adhoc.com.ar brunito, te dejo acá para que cuando puedas documentes un poquito como mejorar la herramienta odoo-module-migrator (si preferís separalo a otro doc pero dejate un link acá)
+_Asignado a Bruno Zanotti_
+[b]por lo general se usa en modelos que tengan un campo company_id
+es una propiedad de la clase
+por si solo no haría nada (o todavía no encotnramos nada) si no que toma sentido cuando en los campos se agrega el "check_company=True"
 
-Interviewer: That's a good choice. How do you plan on using and maintaining your appliances?professional, so I don't always have a lot of time to spend on cooking. But I try to make it work.
-Interviewer: What are some of your favorite dishes to prepare?
-Interviewee: I like to keep things simple, but flavorful. I'll often make roasted vegetables with some kind of protein, like chicken or salmon. I also like to make soups and stews in my slow cooker.
-Interviewer: Speaking of appliances, what types of domestic appliances do you use when cooking at home?
-Interviewee: I use my stovetop and oven quite a bit, but I also rely heavily on my slow cooker. It's just so convenient to be able to set something up in the morning and have it ready when I get home from work.
-Interviewer: How do you decide which appliances to use for a particular recipe?
-Interviewee: It really depends on what I'm making. If I'm making something like roasted vegetables, I'll use the oven. But if I'm making a soup, I'll use the slow cooker. And if I'm making something like scrambled eggs, I'll use the stovetop.
-Interviewer: That makes sense. Do you have any tips or tricks for using domestic appliances effectively in the cooking process?
-Interviewee: I think the key is to know your appliances well. That way, you can use them in the most efficient and effective way possible. For example, with my slow cooker, I know that it runs hot, so I'll adjust my cooking times accordingly.
-Interviewer: How do you balance the convenience of using domestic appliances with the desire to create homemade, high-quality meals?
-Interviewee: That can be a challenge, but I try to strike a balance. I'll use my appliances when I need to, but I also try to incorporate fresh ingredients and homemade touches whenever possible.
-Interviewer: That makes sense. Finally, how do you clean and maintain your domestic appliances to ensure their longevity and optimal performance?
-Interviewee: I try to clean them after every use and follow the manufacturer's recommendations for maintenance. It's important to take good care of your appliances so that they last as long as possible.
-Interviewer: Thank you for sharing your insights with me today. It was great to speak with you.
-Interviewee: Thank you! It was my pleasure.
+
+Ej. agregamos esto en account.move
