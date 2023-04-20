@@ -8,288 +8,592 @@
 <p style="color: red; font-weight: bold">>>>>> PLEASE check and correct alert issues and delete this message and the inline alerts.<hr></p>
 
 
-[Video explicando este procedimiento/artículo](https://drive.google.com/file/d/1-hBKdXlUPY8ApF3AulgHTZYKngO0-65x/view)
+<p>
+<a href="https://drive.google.com/file/d/1-hBKdXlUPY8ApF3AulgHTZYKngO0-65x/view">Video explicando este procedimiento/artículo</a>
+</p>
+<h1>Preparación por única vez</h1>
 
-# Preparación por única vez
+
+<h3>Instalación de odoo-module-migrator</h3>
 
 
-### Instalación de odoo-module-migrator
-
-pip3 install --upgrade git+[https://github.com/adhoc-cicd/oca-odoo-module-migrator/@master](https://github.com/adhoc-cicd/oca-odoo-module-migrator/@master)
-
-**NOTA:** algunos reportaron problemas con que no funcionaba, pareciera ser que tiene que ver con algo [así ](https://stackoverflow.com/questions/70588185/warning-the-script-pip3-8-is-installed-in-usr-local-bin-which-is-not-on-path). El mensaje de pip al instalar diría algo así “WARNING: The script xxxxxxx is installed in 'xxxxxx’ which is not on PATH”
-
+<p>
+pip3 install --upgrade git+<a href="https://github.com/adhoc-cicd/oca-odoo-module-migrator/@master">https://github.com/adhoc-cicd/oca-odoo-module-migrator/@master</a>
+</p>
+<p>
+<strong>NOTA:</strong> algunos reportaron problemas con que no funcionaba, pareciera ser que tiene que ver con algo <a href="https://stackoverflow.com/questions/70588185/warning-the-script-pip3-8-is-installed-in-usr-local-bin-which-is-not-on-path">así </a>. El mensaje de pip al instalar diría algo así “WARNING: The script xxxxxxx is installed in 'xxxxxx’ which is not on PATH”
+</p>
+<p>
 Por el momento instalando con sudo les funcionó pero lo ideal siempre es instalar los paquetes en el usuario. 
+</p>
+<h3>Instalación de pre-commit</h3>
 
 
-### Instalación de pre-commit
-
+<p>
 sudo pip3 install pre-commit
+</p>
+<h1>Procedimiento Actualización de módulo</h1>
 
 
-# Procedimiento Actualización de módulo
+<h2>Gestión de las tareas de actualización</h2>
 
 
-## Gestión de las tareas de actualización
+<p>
+Más info <a href="https://docs.google.com/document/d/13WCrtuY2-lsPr9aN4zauhW7yayV8ZpbhdCiEibaVyzU/view#heading=h.i8ay73nw9pji">acá</a> 
+</p>
+<h2>Procedimiento migración de módulos</h2>
 
-Más info [acá](https://docs.google.com/document/d/13WCrtuY2-lsPr9aN4zauhW7yayV8ZpbhdCiEibaVyzU/view#heading=h.i8ay73nw9pji) 
 
-
-## Procedimiento migración de módulos
-
+<p>
 Para nuestros módulos se pueden migrar juntos en un solo PR módulos muy afines (preferentemente separando en distintos commits pero sin volverse locos)
-
-Los procedimientos de OCA se pueden ver [acá](https://github.com/OCA/maintainer-tools/wiki#migration). Nosotros agilizamos un poco usando la tool “odoo-module-migrate”
-
+</p>
+<p>
+Los procedimientos de OCA se pueden ver <a href="https://github.com/OCA/maintainer-tools/wiki#migration">acá</a>. Nosotros agilizamos un poco usando la tool “odoo-module-migrate”
+</p>
+<p>
 En oca hay 3 diferencias respecto a nuestro procedimiento / forma de trabajar:
+</p>
+<ol>
 
+<li>En los nuevos branches, no están disponibles los módulos de la versión anterior.
 
+<li>Se usa "pre-commit" para ajustar formateo
 
-1. En los nuevos branches, no están disponibles los módulos de la versión anterior.
-2. Se usa "pre-commit" para ajustar formateo
-3. No se acepta migrar varios módulos en el mismo PR
-4. Hay que avisar sobre la migración en un issue de cada repo con nombre “Migration to version XX”
+<li>No se acepta migrar varios módulos en el mismo PR
 
+<li>Hay que avisar sobre la migración en un issue de cada repo con nombre “Migration to version XX”
+</li>
+</ol>
+<p>
 Procedimiento
+</p>
+<ul>
 
+<li><strong>Tomar un módulo</strong> del tile de actualización
 
+<li>Asignarlo a uno mismo
 
-* **Tomar un módulo** del tile de actualización
-* Asignarlo a uno mismo
-* Pararse en el repositorio que vamos a migrar
-* git fetch origin 16.0
-* git checkout -b [versión a la cual migrar].0-t-[]-[] origin/16.0
-* _Para modulos de_
-    * **_Adhoc: odoo-module-migrate -i 15.0 -t 16.0 -nrmf --modules [module_name]_**
-    * **_oca: odoo-module-migrate -i 15.0 -t 16.0 -fp --modules [module_name]_**
-* odoo -d [db_name] -i [module_name]
-* **IMPORTANTE: **Revisar y aplicar cambios de sección 
+<li>Pararse en el repositorio que vamos a migrar
+
+<li>git fetch origin 16.0
+
+<li>git checkout -b [versión a la cual migrar].0-t-[]-[] origin/16.0
+
+<li><em>Para modulos de</em> 
+<ul>
+ 
+<li><strong><em>Adhoc: odoo-module-migrate -i 15.0 -t 16.0 -nrmf --modules [module_name]</em></strong>
+ 
+<li><strong><em>oca: odoo-module-migrate -i 15.0 -t 16.0 -fp --modules [module_name]</em></strong>
+</li> 
+</ul>
+
+<li>odoo -d [db_name] -i [module_name]
+
+<li><strong>IMPORTANTE: </strong>Revisar y aplicar cambios de sección 
 
 <p id="gdcalert1" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: undefined internal link (link text: "Checklist actualización de módulos"). Did you generate a TOC with blue links? </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert2">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
 
-[Checklist actualización de módulos](#heading=h.5atkp62ipain)
-* git commit -a --amend
-* Si es **oca**, correr pre-commit
-    * pre-commit run -a
-    * git commit -a --amend
-* git push adhoc-dev [branch_name]
-* Si es** oca** y da error en pre commit, puede que sea necesario actualizar el archivo de config del pre-commit del repo [ver](https://docs.google.com/document/d/1Fc0sDuyF2z6a1pkBnvV5HVDlurlC5qNQVskULC0Vf3A/edit#bookmark=id.4pf0f91dmydo) (Esto puede ser necesario si falla el pre-commit)
+<a href="#heading=h.5atkp62ipain">Checklist actualización de módulos</a>
+
+<li>git commit -a --amend
+
+<li>Si es <strong>oca</strong>, correr pre-commit 
+<ul>
+ 
+<li>pre-commit run -a
+ 
+<li>git commit -a --amend
+</li> 
+</ul>
+
+<li>git push adhoc-dev [branch_name]
+
+<li>Si es<strong> oca</strong> y da error en pre commit, puede que sea necesario actualizar el archivo de config del pre-commit del repo <a href="https://docs.google.com/document/d/1Fc0sDuyF2z6a1pkBnvV5HVDlurlC5qNQVskULC0Vf3A/edit#bookmark=id.4pf0f91dmydo">ver</a> (Esto puede ser necesario si falla el pre-commit)
+</li>
+</ul>
+<h2>Sobre migración de varios módulos juntos</h2>
 
 
-## Sobre migración de varios módulos juntos
-
+<p>
 Cuando muchos módulos están relacionados, hay mucha economía de escala en migrarlos a todos juntos, no solo para el desarrollador, si no también para quien realiza los tests y hace el review.
-
+</p>
+<p>
 En estos casos es MUY recomendable hacer todos juntos. Al respecto, si los módulos son de:
+</p>
+<ul>
+
+<li>Adhoc: 
+<ul>
+ 
+<li>Idealmente hacer un commit por cada módulo en mismo PR
+ 
+<li>Si por alguna razón queda alguna cosa cruzada en otro commit no es terrible
+ 
+<li>Si son módulos en distintos repositorios es importante usar mismo nombre de branch para que la build de runbot sea la misma y los test y el test funcional se haga sobre todo a la vez
+</li> 
+</ul>
+
+<li>OCA: 
+<ul>
+ 
+<li>En oca no se exige que cada PR migre solo un módulo
+ 
+<li>Si podemos hacer varios PRs en simultánea y usar este artilugio oficial de OCA para que un PR use otro PR temporalmente: <a href="https://github.com/OCA/maintainer-tools/wiki/Use-temporary-reference(s)-to-another-pull-request(s)">Use temporary reference(s) to another pull request(s)</a> 
+</li> 
+</ul>
+</li> 
+</ul>
+<h2>Checklist actualización de módulos</h2>
 
 
+<ul>
 
-* Adhoc:
-    * Idealmente hacer un commit por cada módulo en mismo PR
-    * Si por alguna razón queda alguna cosa cruzada en otro commit no es terrible
-    * Si son módulos en distintos repositorios es importante usar mismo nombre de branch para que la build de runbot sea la misma y los test y el test funcional se haga sobre todo a la vez
-* OCA:
-    * En oca no se exige que cada PR migre solo un módulo
-    * Si podemos hacer varios PRs en simultánea y usar este artilugio oficial de OCA para que un PR use otro PR temporalmente: [Use temporary reference(s) to another pull request(s)](https://github.com/OCA/maintainer-tools/wiki/Use-temporary-reference(s)-to-another-pull-request(s)) 
+<li>Recordar levantar con <strong>dev=all</strong> para tener un pdb donde se produzcan errores
 
+<li><strong>Revisar</strong> todos los <strong>warnings</strong> del LOG
 
-## Checklist actualización de módulos
+<li><strong>TESTEAR funcionalmente</strong>
 
+<li><strong>Revisar</strong> en los modelos <strong>nativos de odoo</strong>, si hay métodos que llamen a super, revisar que el método de odoo <strong>siga existiendo</strong> en odoo y se <strong>definan igual</strong>
 
+<li><strong>Borrar </strong>comentarios y archivos sin uso
 
-* Recordar levantar con **dev=all** para tener un pdb donde se produzcan errores
-* **Revisar** todos los **warnings** del LOG
-* **TESTEAR funcionalmente**
-* **Revisar** en los modelos **nativos de odoo**, si hay métodos que llamen a super, revisar que el método de odoo **siga existiendo** en odoo y se **definan igual**
-* **Borrar **comentarios y archivos sin uso
-* Revisar **readme (ver [como redactar un Readme](https://docs.google.com/document/d/1ff7CfHgnxpYQ3_-z8U1qSa2IgrnNBnMPDSWVyAwj5a0/edit?usp=sharing))**
-* Estamos adaptando algún registro con **noupdate**? En pasos avisar que si se cambia una rule y tenía no update (o cualquier otra data con noupdate) se requiere script de migra
-* ¿Algún cambio nuevo que detectamos? Podemos sumar algo a los release notes? Podemos 
+<li>Revisar <strong>readme (ver <a href="https://docs.google.com/document/d/1ff7CfHgnxpYQ3_-z8U1qSa2IgrnNBnMPDSWVyAwj5a0/edit?usp=sharing">como redactar un Readme</a>)</strong>
+
+<li>Estamos adaptando algún registro con <strong>noupdate</strong>? En pasos avisar que si se cambia una rule y tenía no update (o cualquier otra data con noupdate) se requiere script de migra
+
+<li>¿Algún cambio nuevo que detectamos? Podemos sumar algo a los release notes? Podemos 
 
 <p id="gdcalert2" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: undefined internal link (link text: "Mejorar odoo-module-migrator"). Did you generate a TOC with blue links? </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert3">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
 
-[Mejorar odoo-module-migrator](#heading=h.flqjt88i7743)?
-* Ver release notes técnicos de la versión correspondiente (especial atención en “Checklist…”:
-    * 
-    * 
+<a href="#heading=h.flqjt88i7743">Mejorar odoo-module-migrator</a>?
+
+<li>Ver release notes técnicos de la versión correspondiente (especial atención en “Checklist…”: 
+<ul>
+ 
+<li>
+ 
+<li>
+</li> 
+</ul>
+</li> 
+</ul>
+<h1>Mejorar odoo-module-migrator</h1>
 
 
-# Mejorar odoo-module-migrator
+<p>
 
-
-
+</p>
+<p>
 TODO
+</p>
+<h1></h1>
 
 
-# 
+<h1>VIEJO - Aspectos específicos por cada versión</h1>
 
 
-# VIEJO - Aspectos específicos por cada versión
+<h2>V15</h2>
 
 
-## V15
-
-Ver: [Release notes técnicos v15](https://docs.google.com/document/d/1A1jt2XOH6NkRCu7RsNt_ATDM2Wl67XV-MdnJ9ZCTz-g/edit#heading=h.32k5o1r1fdxl)
-
-
-## V13
+<p>
+Ver: <a href="https://docs.google.com/document/d/1A1jt2XOH6NkRCu7RsNt_ATDM2Wl67XV-MdnJ9ZCTz-g/edit#heading=h.32k5o1r1fdxl">Release notes técnicos v15</a>
+</p>
+<h2>V13</h2>
 
 
-### Prioritario
+<h3>Prioritario</h3>
 
 
+<ul>
 
-* **Statusbar clickeable**
-    * clickable="True" → options="{'clickable': '1'...
-* **Contables: (NO hacer reemplazos masivos)**
-        * date_invoice → invoice_date
-        * Buscar 'paid' y 'open' y reemplazar por lo que corresponda
-        * Account.invoice → account.move
-        * account.document.type → l10n_latam.document.type
-        * afip_responsability_type_id → l10n_ar_afip_responsibility_type_id
-        * main_id_number → vat
-        * main_id_category_id → l10n_latam_identification_type_id
-        * l10n_ar_partner.dt_CUIT → l10n_ar.it_cuit
-        * action_invoice_open → post
-        * company_requires_vat → l10n_ar_company_requires_vat
-        * afip_code → l10n_ar_afip_code (no en todos los casos pero muy probable)
-        * document_number → l10n_latam_document_number (salvo en pagos que sigue llamandose document_number)
-        * cuit_required → ensure_vat
-        * formated_cuit -->l10n_ar_formatted_vat
-        * [Sobre eliminado de facturas y fusión con asientos, también creación de facturas](https://docs.google.com/document/d/1EXBbD40BWftxe5_nBo7sRciBBW4zbO6nQYxCxug8GJw/edit#bookmark=id.7mrljztk2h5b)
-* **Recordsets**
-    * Revisar si hace falta agregar "sorted()"
-* **Campos calculados**
-    * Revisar / agregar depends para garantizar que devuelvan valor correcto (sin depends por ahí deja valor de cache)
-    * Si no stored. Devolver siempre un valor:
-        * Devolver el valor por defecto según tipo
-            * Float: 0.0
-            * Integer: 0
-            * Recordset: recorset vacío
-            * Char: False
-            * Boolean: False
-        * Si no vamos obtener error tipo Something went wrong !
+<li><strong>Statusbar clickeable</strong> 
+<ul>
+ 
+<li>clickable="True" → options="{'clickable': '1'...
+</li> 
+</ul>
 
+<li><strong>Contables: (NO hacer reemplazos masivos)</strong>  
+<ul>
+  
+<li>date_invoice → invoice_date
+  
+<li>Buscar 'paid' y 'open' y reemplazar por lo que corresponda
+  
+<li>Account.invoice → account.move
+  
+<li>account.document.type → l10n_latam.document.type
+  
+<li>afip_responsability_type_id → l10n_ar_afip_responsibility_type_id
+  
+<li>main_id_number → vat
+  
+<li>main_id_category_id → l10n_latam_identification_type_id
+  
+<li>l10n_ar_partner.dt_CUIT → l10n_ar.it_cuit
+  
+<li>action_invoice_open → post
+  
+<li>company_requires_vat → l10n_ar_company_requires_vat
+  
+<li>afip_code → l10n_ar_afip_code (no en todos los casos pero muy probable)
+  
+<li>document_number → l10n_latam_document_number (salvo en pagos que sigue llamandose document_number)
+  
+<li>cuit_required → ensure_vat
+  
+<li>formated_cuit -->l10n_ar_formatted_vat
+  
+<li><a href="https://docs.google.com/document/d/1EXBbD40BWftxe5_nBo7sRciBBW4zbO6nQYxCxug8GJw/edit#bookmark=id.7mrljztk2h5b">Sobre eliminado de facturas y fusión con asientos, también creación de facturas</a>
+</li>  
+</ul>
+</li>  
+</ul>
+
+<li><strong>Recordsets</strong> 
+<ul>
+ 
+<li>Revisar si hace falta agregar "sorted()"
+</li> 
+</ul>
+
+<li><strong>Campos calculados</strong> 
+<ul>
+ 
+<li>Revisar / agregar depends para garantizar que devuelvan valor correcto (sin depends por ahí deja valor de cache)
+ 
+<li>Si no stored. Devolver siempre un valor:  
+<ul>
+  
+<li>Devolver el valor por defecto según tipo   
+<ul>
+   
+<li>Float: 0.0
+   
+<li>Integer: 0
+   
+<li>Recordset: recorset vacío
+   
+<li>Char: False
+   
+<li>Boolean: False
+</li>   
+</ul>
+  
+<li>Si no vamos obtener error tipo Something went wrong !
+</li>  
+</ul>
+</li>  
+</ul>
+<p>
 
 
 <p id="gdcalert3" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image1.png). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert4">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
 
 
-![alt_text](images/image1.png "image_tooltip")
+<img src="images/image1.png" width="" alt="alt_text" title="image_tooltip">
+
+</p> 
+<ul>
+ 
+<li>Context depends?
+ 
+<li>No mezclar métodos computados que escriban stored y no stored
+</li> 
+</ul>
+
+<li><a href="https://github.com/odoo/odoo/pull/34524">No más supplier / customer en partners</a> 
+<ul>
+ 
+<li>'search_default_supplier':1 → 'res_partner_search_mode': 'supplier'
+ 
+<li>'search_default_customer':1 → 'res_partner_search_mode': 'customer'
+ 
+<li>domain=[('customer', '=', True)] → no dejar nada, si bien se podria psar el context en odoo veo que no dejan nada
+ 
+<li>domain=[('supplier', '=', True)] → no dejar nada, si bien se podria psar el context en odoo veo que no dejan nada
+</li> 
+</ul>
+
+<li><strong>Cambio de multi-company</strong> 
+<ul>
+ 
+<li><a href="https://www.odoo.com/documentation/13.0/howtos/company.html">Muy buena doc acá</a>
+ 
+<li>En cualquier <strong>modelo que creemos</strong> con company_id ver de usar "<strong>_check_company_auto</strong>" y "<strong>check_company=True</strong>"
+ 
+<li>env.user.company_id --> <strong>env.company</strong>
+ 
+<li>['|',('company_id','child_of',[user.company_id.id]),('company_id','=',False)] → ['|',('company_id', 'in', <strong>company_ids</strong>),('company_id','=',False)]
+ 
+<li>attrs="{'invisible': [('customer', '=', False)]}"
+ 
+<li>En campos property (company_dependant) domain="[('company_id', '=', allowed_company_ids[0])]", check_company=True,
+ 
+<li>Timesheet / project
+ 
+<li>task_new_project → task_in_project
+ 
+<li>Decimal precision (si figura daría warning en log)  
+<ul>
+  
+<li>digits=dp.get_precision('Account') → digits='Account'
+</li>  
+</ul>
+ 
+<li>Xml - definición de function  
+<ul>
+  
+<li>Si obtenemos error "AssertionError: Element odoo has extra content: record, line 3" es porque hay un &lt;function que se le está pasando id=" o algun tag adicional en algún otro lado (borrar ese tag)
+</li>  
+</ul>
+ 
+<li>Invalid view xxxx.tree definition in …  
+<ul>
+  
+<li>Esto puede ser porque ya no se puede definir mas el fonts y colors en la definición de vistas tree, ahora hay que hacer algo como "decoration-info="state == 'draft'"
+</li>  
+</ul>
+</li>  
+</ul>
+<h3>NTH / menos prioridad</h3>
 
 
+<ul>
 
+<li>NO crear nuevos onchanges pero no gastarnos en sacar los existentes. Oportunidad de usar nuevos campos computed stored (o related) en vez de onchanges 
+<ul>
+ 
+<li>Siempre poner store=True y readonly=False
+ 
+<li>Si usamos related recordar revisar depends que por defecto es el mismo que related
+</li> 
+</ul>
 
-    * Context depends?
-    * No mezclar métodos computados que escriban stored y no stored
-* [No más supplier / customer en partners](https://github.com/odoo/odoo/pull/34524)
-    * 'search_default_supplier':1 → 'res_partner_search_mode': 'supplier'
-    * 'search_default_customer':1 → 'res_partner_search_mode': 'customer'
-    * domain=[('customer', '=', True)] → no dejar nada, si bien se podria psar el context en odoo veo que no dejan nada
-    * domain=[('supplier', '=', True)] → no dejar nada, si bien se podria psar el context en odoo veo que no dejan nada
-* **Cambio de multi-company**
-    * [Muy buena doc acá](https://www.odoo.com/documentation/13.0/howtos/company.html)
-    * En cualquier **modelo que creemos** con company_id ver de usar "**_check_company_auto**" y "**check_company=True**"
-    * env.user.company_id --> **env.company**
-    * ['|',('company_id','child_of',[user.company_id.id]),('company_id','=',False)] → ['|',('company_id', 'in', **company_ids**),('company_id','=',False)]
-    * attrs="{'invisible': [('customer', '=', False)]}"
-    * En campos property (company_dependant) domain="[('company_id', '=', allowed_company_ids[0])]", check_company=True,
-    * Timesheet / project
-    * task_new_project → task_in_project
-    * Decimal precision (si figura daría warning en log)
-        * digits=dp.get_precision('Account') → digits='Account'
-    * Xml - definición de function
-        * Si obtenemos error "AssertionError: Element odoo has extra content: record, line 3" es porque hay un &lt;function que se le está pasando id=" o algun tag adicional en algún otro lado (borrar ese tag)
-    * Invalid view xxxx.tree definition in …
-        * Esto puede ser porque ya no se puede definir mas el fonts y colors en la definición de vistas tree, ahora hay que hacer algo como "decoration-info="state == 'draft'"
+<li>Mejoras en todas las versiones (media prioridad) 
+<ul>
+ 
+<li>En python: No usar eval! Usar safe_eval (y seguramente en otros usa dict, list, etc) (EN XML SEGUIMOS CON EVAL)
+ 
+<li>Seguridad, volver a revisar:  
+<ul>
+  
+<li>1. Usar ACLS que minimo restringan a employee
+  
+<li>2. Usar groups en fields criticos de modelos publicos (ej. res.company)
+  
+<li>3. Usar métodos privados (con _) cuando sea posible
+  
+<li><a href="https://www.slideshare.net/ElnAnnaJnasdttir/odoo-experience-2018-how-to-break-odoo-security-or-how-to-prevent-it">Otros de esta charla?</a>
+</li>  
+</ul>
+</li>  
+</ul>
 
+<li>Baja prioridad 
+<ul>
+ 
+<li>Campos related: entender que por defecto son related_sudo = True (tal vez en algunos casos querramos que sea False, como en el caso de costo de reposición según precio de proveedor)
+</li> 
+</ul>
+</li> 
+</ul>
+<h2>V12</h2>
 
-### NTH / menos prioridad
-
-
-
-* NO crear nuevos onchanges pero no gastarnos en sacar los existentes. Oportunidad de usar nuevos campos computed stored (o related) en vez de onchanges
-    * Siempre poner store=True y readonly=False
-    * Si usamos related recordar revisar depends que por defecto es el mismo que related
-* Mejoras en todas las versiones (media prioridad)
-    * En python: No usar eval! Usar safe_eval (y seguramente en otros usa dict, list, etc) (EN XML SEGUIMOS CON EVAL)
-    * Seguridad, volver a revisar:
-        * 1. Usar ACLS que minimo restringan a employee
-        * 2. Usar groups en fields criticos de modelos publicos (ej. res.company)
-        * 3. Usar métodos privados (con _) cuando sea posible
-        * [Otros de esta charla?](https://www.slideshare.net/ElnAnnaJnasdttir/odoo-experience-2018-how-to-break-odoo-security-or-how-to-prevent-it)
-* Baja prioridad
-    * Campos related: entender que por defecto son related_sudo = True (tal vez en algunos casos querramos que sea False, como en el caso de costo de reposición según precio de proveedor)
-
-
-## V12
-
-
-
-    * **Ajustes necesarios para v12**
-        * **Vistas kanban**
-            * borrar "class="dropdown-toggle btn""
-        * **Buttons en vistas tree** requiere de string (por más que tengan icon)
-        * **Campos related**:
-            * que tengan readonly hay que borrarlo. 
-            * sin readonly hay que poner **readonly=False**
-        * parent_left → parent_path
-            * Reemplazar campos "**parent_left**" y "**parent_right**" por:
+ 
+<ul>
+ 
+<li><strong>Ajustes necesarios para v12</strong>  
+<ul>
+  
+<li><strong>Vistas kanban</strong>   
+<ul>
+   
+<li>borrar "class="dropdown-toggle btn""
+</li>   
+</ul>
+  
+<li><strong>Buttons en vistas tree</strong> requiere de string (por más que tengan icon)
+  
+<li><strong>Campos related</strong>:   
+<ul>
+   
+<li>que tengan readonly hay que borrarlo. 
+   
+<li>sin readonly hay que poner <strong>readonly=False</strong>
+</li>   
+</ul>
+  
+<li>parent_left → parent_path   
+<ul>
+   
+<li>Reemplazar campos "<strong>parent_left</strong>" y "<strong>parent_right</strong>" por:
+<p>
 
             parent_path = fields.Char(index=True)
+</p>  
+<ul>
+  
+<li><strong>Vistas </strong>requieren <strong>name </strong>en<strong> filters y for </strong>en<strong> labels</strong> (buscar "&lt;filter" y "&lt;label")
+  
+<li><strong>Tema fechas<a href="https://docs.google.com/document/d/15z7xbX2Pa883gSn1Gct-ItpeAGsPs_01VFP8gGMODy0/edit?debug=0"> mas info</a></strong>   
+<ul>
+   
+<li>Campos fecha devuelven datetime (no haría falta conversión strftime/strptime)
+   
+<li>Tener en cuenta estos tips sobre todo de <strong>date_utils</strong> y <strong>float_utils</strong>
+   
+<li>Ya no hace falta la conversión a “<strong>string</strong>” para usar en un dominio de un search, acepta tanto <strong>string</strong> como <strong>datetime. </strong>
+<p>
 
-        * **Vistas **requieren **name **en** filters y for **en** labels** (buscar "&lt;filter" y "&lt;label")
-        * **Tema fechas[ mas info](https://docs.google.com/document/d/15z7xbX2Pa883gSn1Gct-ItpeAGsPs_01VFP8gGMODy0/edit?debug=0)**
-            * Campos fecha devuelven datetime (no haría falta conversión strftime/strptime)
-            * Tener en cuenta estos tips sobre todo de **date_utils** y **float_utils**
-            * Ya no hace falta la conversión a “**string**” para usar en un dominio de un search, acepta tanto **string** como **datetime. **
+            Ej<strong>: [(‘date’, ‘>’, <code>fields.Datetime.now(self)])</code></strong>
 
-            Ej**: [(‘date’, ‘>’, <code>fields.Datetime.now(self)])</code></strong>
-
-        * cambiar los "**.compute"(** (de currencies) a **._convert(**.
-            * Por ejemplo:
-                * de: currency.**compute**(1.0, rec.company_id.currency_id, round=False)
-                * a: currency.**_convert**(1.0, rec.company_id.currency_id, **company, date**, round=False)
-            * DONDE:
-                * hay que ver qué company y date pasar y podemos **borrar si en contexto** estábamos mandando **date y/o company** para este cálculo
-                * el date puede ser algo así: rec.date_invoice **or fields.Date.today()**
-        * **message_post**
-            * aparentemente, si estamos usando .message_post("mensaje") tenemos que agregar "body=" al pasar el mensaje, es decir .message_post(body="mensaje")
-        * **Estados facturas**
-            * **no mas** estado **proforma, proforma2** ahora los estados son 'draft', 'open', 'in_payment', 'paid', 'cancel'
-        * **create multi**:
-            * podemos crear registros de manera multi guardando los dict en lista y luego llamando a .create(vals_list)
-            * si estamos modificando un create revisar si el método original usa model_create_multi y tratar de usarlo
-    * **Checklist (para desarrollador y revisor). En orden de prioridad**
-        * **Borrar** **scripts de migración** viejos
-        * **Usabilidad**
-            * **Labels **y **helps** de **campos**
-            * Verificar **constraints** (sql y normales) que podrían venir bien. (por ej. de compañías)
-            * Mejorar **dominios** o valores que se pasen por **contexto** para mejorar usabilidad
-            * Mejorar **mensajes de excepción** que arrojamos al usuario. Que entienda sin necesidad de preguntar. Y usar raise correcto (ver en checklist performance) (elegir tipo correcto según [esto](https://docs.google.com/document/d/1Fc0sDuyF2z6a1pkBnvV5HVDlurlC5qNQVskULC0Vf3A/edit#bookmark=id.kk9ks7rpie13))
-        * [Checklist de performance](https://docs.google.com/document/d/1Fc0sDuyF2z6a1pkBnvV5HVDlurlC5qNQVskULC0Vf3A/edit#heading=h.cihxo1nmfd8s). Especialmente:
-            * **related:**
-                * que no se usen en **constraints / create / write**
-                * si NO es store, NO usar en search o código en general
-        * **Seguridad**:
-            * Donde hagamos **cr.execute** revisar que los parámetros se pasan como argumento
-            * Pasar métodos públicos a privados (agregar prefijo _), sin volvernos locos. **CUIDADO:**, si hacemos un método privado no podemos llamarlo remotamente ni desde vistas
-            * Usar ACLS que minimo restringan a employee
-            * Usar groups en fields criticos de modelos públicos (ej. res.company)
-            * Podemos proteger algún uso indeseado?
-        * Groups en vistas (usar group en campo si es por tema seguridad):
-            * Si es solo para _ux y no son campos calculados complejos que afecten performance, podemos dejarlo en la vista
-            * Pero es mejor, si no complica código, poner el groups en la vista para que directamente no lo renderice
-        * Agregar datos demo.
-        * **Cosas de formato:**
-            * Usar forma reducida de super "**super()**"
-            * **Re-organizar carpetas **usando “models, views, etc”
-            * Borrar los &lt;data> (mover noupdate a "odoo" si corresponde)
-        * Hay casos de **test críticos** que podrían implementarse?
-        * Readme según [estas bases](https://github.com/ingadhoc/maintainer-tools/blob/master/template/adhoc_module/README.rst) y con descripción correcta (en inglés salvo para repos en bitbucket)
-    * Verificar si requiere o no **scripts de migración** e implementar
-    * Hacer PR:
-        * vincular PR en tarea
-        * pasar a etapa reviewing
-        * mandar comentario pidiendo reviews
-        * registrar cualquier cambio detectado en[ este documento](https://docs.google.com/document/d/1kgfP_FFQMwlP0yR5iFNtkJJdBlA22n_IxSd1mJzQrjA/edit#heading=h.ewr3uoz1r3hw)
+</li>   
+</ul>
+</li>   
+</ul>
+</li>   
+</ul>
+</li>   
+</ul>
+</li>   
+</ul>  
+<ul>
+  
+<li>cambiar los "<strong>.compute"(</strong> (de currencies) a <strong>._convert(</strong>.   
+<ul>
+   
+<li>Por ejemplo:    
+<ul>
+    
+<li>de: currency.<strong>compute</strong>(1.0, rec.company_id.currency_id, round=False)
+    
+<li>a: currency.<strong>_convert</strong>(1.0, rec.company_id.currency_id, <strong>company, date</strong>, round=False)
+</li>    
+</ul>
+   
+<li>DONDE:    
+<ul>
+    
+<li>hay que ver qué company y date pasar y podemos <strong>borrar si en contexto</strong> estábamos mandando <strong>date y/o company</strong> para este cálculo
+    
+<li>el date puede ser algo así: rec.date_invoice <strong>or fields.Date.today()</strong>
+</li>    
+</ul>
+</li>    
+</ul>
+  
+<li><strong>message_post</strong>   
+<ul>
+   
+<li>aparentemente, si estamos usando .message_post("mensaje") tenemos que agregar "body=" al pasar el mensaje, es decir .message_post(body="mensaje")
+</li>   
+</ul>
+  
+<li><strong>Estados facturas</strong>   
+<ul>
+   
+<li><strong>no mas</strong> estado <strong>proforma, proforma2</strong> ahora los estados son 'draft', 'open', 'in_payment', 'paid', 'cancel'
+</li>   
+</ul>
+  
+<li><strong>create multi</strong>:   
+<ul>
+   
+<li>podemos crear registros de manera multi guardando los dict en lista y luego llamando a .create(vals_list)
+   
+<li>si estamos modificando un create revisar si el método original usa model_create_multi y tratar de usarlo
+</li>   
+</ul>
+</li>   
+</ul>
+ 
+<li><strong>Checklist (para desarrollador y revisor). En orden de prioridad</strong>  
+<ul>
+  
+<li><strong>Borrar</strong> <strong>scripts de migración</strong> viejos
+  
+<li><strong>Usabilidad</strong>   
+<ul>
+   
+<li><strong>Labels </strong>y <strong>helps</strong> de <strong>campos</strong>
+   
+<li>Verificar <strong>constraints</strong> (sql y normales) que podrían venir bien. (por ej. de compañías)
+   
+<li>Mejorar <strong>dominios</strong> o valores que se pasen por <strong>contexto</strong> para mejorar usabilidad
+   
+<li>Mejorar <strong>mensajes de excepción</strong> que arrojamos al usuario. Que entienda sin necesidad de preguntar. Y usar raise correcto (ver en checklist performance) (elegir tipo correcto según <a href="https://docs.google.com/document/d/1Fc0sDuyF2z6a1pkBnvV5HVDlurlC5qNQVskULC0Vf3A/edit#bookmark=id.kk9ks7rpie13">esto</a>)
+</li>   
+</ul>
+  
+<li><a href="https://docs.google.com/document/d/1Fc0sDuyF2z6a1pkBnvV5HVDlurlC5qNQVskULC0Vf3A/edit#heading=h.cihxo1nmfd8s">Checklist de performance</a>. Especialmente:   
+<ul>
+   
+<li><strong>related:</strong>    
+<ul>
+    
+<li>que no se usen en <strong>constraints / create / write</strong>
+    
+<li>si NO es store, NO usar en search o código en general
+</li>    
+</ul>
+</li>    
+</ul>
+  
+<li><strong>Seguridad</strong>:   
+<ul>
+   
+<li>Donde hagamos <strong>cr.execute</strong> revisar que los parámetros se pasan como argumento
+   
+<li>Pasar métodos públicos a privados (agregar prefijo _), sin volvernos locos. <strong>CUIDADO:</strong>, si hacemos un método privado no podemos llamarlo remotamente ni desde vistas
+   
+<li>Usar ACLS que minimo restringan a employee
+   
+<li>Usar groups en fields criticos de modelos públicos (ej. res.company)
+   
+<li>Podemos proteger algún uso indeseado?
+</li>   
+</ul>
+  
+<li>Groups en vistas (usar group en campo si es por tema seguridad):   
+<ul>
+   
+<li>Si es solo para _ux y no son campos calculados complejos que afecten performance, podemos dejarlo en la vista
+   
+<li>Pero es mejor, si no complica código, poner el groups en la vista para que directamente no lo renderice
+</li>   
+</ul>
+  
+<li>Agregar datos demo.
+  
+<li><strong>Cosas de formato:</strong>   
+<ul>
+   
+<li>Usar forma reducida de super "<strong>super()</strong>"
+   
+<li><strong>Re-organizar carpetas </strong>usando “models, views, etc”
+   
+<li>Borrar los &lt;data> (mover noupdate a "odoo" si corresponde)
+</li>   
+</ul>
+  
+<li>Hay casos de <strong>test críticos</strong> que podrían implementarse?
+  
+<li>Readme según <a href="https://github.com/ingadhoc/maintainer-tools/blob/master/template/adhoc_module/README.rst">estas bases</a> y con descripción correcta (en inglés salvo para repos en bitbucket)
+</li>  
+</ul>
+ 
+<li>Verificar si requiere o no <strong>scripts de migración</strong> e implementar
+ 
+<li>Hacer PR:  
+<ul>
+  
+<li>vincular PR en tarea
+  
+<li>pasar a etapa reviewing
+  
+<li>mandar comentario pidiendo reviews
+  
+<li>registrar cualquier cambio detectado en<a href="https://docs.google.com/document/d/1kgfP_FFQMwlP0yR5iFNtkJJdBlA22n_IxSd1mJzQrjA/edit#heading=h.ewr3uoz1r3hw"> este documento</a>
